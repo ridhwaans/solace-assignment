@@ -33,6 +33,10 @@ docker compose up -d
 ```bash
 npx drizzle-kit push
 ```
+or
+```bash
+DATABASE_URL=<DATABASE_URL> npm run migrate:up
+```
 
 4. Seed the database
 

@@ -1,5 +1,5 @@
-import db from "..";
 import { advocates } from "../schema";
+import { InferInsertModel } from "drizzle-orm";
 
 const specialties = [
   "Bipolar",
@@ -37,7 +37,10 @@ const randomSpecialty = () => {
   return [random1, random2];
 };
 
-const advocateData = [
+type Advocate = InferInsertModel<typeof advocates>;
+
+
+const advocateData: Advocate[] = [
   {
     firstName: "John",
     lastName: "Doe",

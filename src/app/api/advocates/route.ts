@@ -1,12 +1,28 @@
 import db from "../../../db";
 import { advocates } from "../../../db/schema";
-import { advocateData } from "../../../db/seed/advocates";
 
 export async function GET() {
-  // Uncomment this line to use a database
-  // const data = await db.select().from(advocates);
+  try {
+    const data = await db.select().from(advocates);
+    return Response.json({ data });
+  } catch (error: any) {
+    if (process.env.NODE_ENV === "development") {
+      console.error("Database connection failed:", error);
+    }
 
-  const data = advocateData;
+    const isConnectionError =
+      error.code === "ECONNREFUSED";
 
-  return Response.json({ data });
+    return new Response(
+      JSON.stringify({
+        error: isConnectionError
+          ? "Database connection failed"
+          : "Unexpected error",
+      }),
+      {
+        status: isConnectionError ? 503 : 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
 }
