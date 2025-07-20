@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { SearchBox } from "./SearchBox";
+import { Table } from "./Table";
 
-type Advocate = {
+export type Advocate = {
   id: number;
   firstName: string;
   lastName: string;
@@ -85,60 +87,26 @@ export default function Home() {
   };
 
   if (error) {
-    return (
-      <main style={{ margin: "24px" }}>
-          {error}
-      </main>
-    );
-  }
+  return (
+    <main className="max-w-6xl mx-auto p-6">
+      <div className="border border-red-400 bg-red-50 text-red-700 rounded-md shadow-md text-center font-semibold p-6">
+        {error}
+      </div>
+    </main>
+  );
+}
 
   return (
-    <main style={{ margin: "24px" }}>
-      <h1>Solace Advocates</h1>
-      <br />
-      <br />
-      <div>
-        <p>Search</p>
-        <p>
-          Searching for: <span id="search-term"></span>
-        </p>
-        <input style={{ border: "1px solid black" }} value={searchTerm} onChange={onChange} />
-        <button onClick={resetSearch}>Reset Search</button>
-      </div>
-      <br />
-      <br />
-      <table>
-        <thead>
-          <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>City</th>
-            <th>Degree</th>
-            <th>Specialties</th>
-            <th>Years of Experience</th>
-            <th>Phone Number</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredAdvocates.map((advocate) => {
-            return (
-              <tr>
-                <td>{advocate.firstName}</td>
-                <td>{advocate.lastName}</td>
-                <td>{advocate.city}</td>
-                <td>{advocate.degree}</td>
-                <td>
-                  {advocate.specialties.map((s) => (
-                    <div>{s}</div>
-                  ))}
-                </td>
-                <td>{advocate.yearsOfExperience}</td>
-                <td>{advocate.phoneNumber}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+    <main className="max-w-6xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-8 text-center">Solace Advocates</h1>
+
+      <SearchBox searchTerm={searchTerm} onChange={onChange} onReset={resetSearch} />
+
+      {error ? (
+        <p className="text-red-600 text-center my-6">{error}</p>
+      ) : (
+        <Table advocates={filteredAdvocates} />
+      )}
     </main>
   );
 }
