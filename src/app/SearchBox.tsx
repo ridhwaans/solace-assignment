@@ -1,10 +1,14 @@
-type SearchBoxProps = {
-  searchTerm: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onReset: () => void;
-};
+import React from "react";
 
-export function SearchBox({ searchTerm, onChange, onReset }: SearchBoxProps) {
+export function SearchBox({
+  searchTerm,
+  onChange,
+  onReset,
+}: {
+  searchTerm: string;
+  onChange: (value: string) => void;
+  onReset: () => void;
+}) {
   return (
     <div className="mb-6">
       <label htmlFor="search" className="block text-lg font-semibold mb-1">
@@ -14,7 +18,7 @@ export function SearchBox({ searchTerm, onChange, onReset }: SearchBoxProps) {
         id="search"
         type="text"
         value={searchTerm}
-        onChange={onChange}
+        onChange={(e) => onChange(e.target.value)}
         placeholder="Search by name, city, degree, specialties, YOE, or phone number"
         className="w-full max-w-xl px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
