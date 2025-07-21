@@ -21,7 +21,7 @@ export async function GET(request: Request) {
     const sortBy = searchParams.get("sortBy") || "id";
     const sortOrder = searchParams.get("sortOrder") === "desc" ? desc : asc;
 
-    // Filters
+    // Filtering
     const filter = searchParams.get("filter")?.trim();
     const conditions = [];
 
@@ -37,7 +37,7 @@ export async function GET(request: Request) {
       );
     }
 
-    // Base query for data
+    // Base query
     const query = db.select().from(advocates);
     if (conditions.length > 0) {
       query.where(and(...conditions));
@@ -48,7 +48,7 @@ export async function GET(request: Request) {
       .limit(pageSize)
       .offset(offset);
 
-    // Filtered total count
+    // Filtered count
     const totalQuery = db
       .select({ count: sql`count(*)` })
       .from(advocates);

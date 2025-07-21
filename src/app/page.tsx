@@ -16,9 +16,23 @@ export type Advocate = {
   createdAt: Date | null;
 };
 
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedValue(value), delay);
+
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+
 export default function Home() {
   const [advocates, setAdvocates] = useState<Advocate[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchInput, setSearchInput] = useState(""); 
+  const searchTerm = useDebounce(searchInput, 500); 
+
   const [sortBy, setSortBy] = useState("id");
   const [sortOrder, setSortOrder] = useState("asc");
   const [page, setPage] = useState(1);
@@ -45,7 +59,6 @@ export default function Home() {
         throw new Error(`API responded with status ${response.status}`);
       }
       const json = await response.json();
-      console.log(json)
       setAdvocates(json.data);
       setPagination(json.pagination);
       setError(null);
@@ -56,16 +69,15 @@ export default function Home() {
 
   useEffect(() => {
     fetchAdvocates();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm, sortBy, sortOrder, page, pageSize]);
 
-  const onChange = (e) => {
-    setSearchTerm(e.target.value);
+  const onChange = (value: string) => {
+    setSearchInput(value);
     setPage(1);
   };
 
   const resetSearch = () => {
-    setSearchTerm("");
+    setSearchInput("");
     setPage(1);
   };
 
@@ -79,21 +91,21 @@ export default function Home() {
     setPage(1);
   };
 
-if (error) {
-   return (
-    <main className="max-w-6xl mx-auto p-6">
-      <div className="border border-red-400 bg-red-50 text-red-700 rounded-md shadow-md text-center font-semibold p-6">
-        {error}
-      </div>
-    </main>
-  );
-}
+  if (error) {
+    return (
+      <main className="max-w-6xl mx-auto p-6">
+        <div className="border border-red-400 bg-red-50 text-red-700 rounded-md shadow-md text-center font-semibold p-6">
+          {error}
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="max-w-6xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-8 text-center">Solace Advocates</h1>
       <SearchBox
-        searchTerm={searchTerm}
+        searchTerm={searchInput}
         onChange={onChange}
         onReset={resetSearch}
       />

@@ -6,7 +6,7 @@ export function SearchBox({
   onReset,
 }: {
   searchTerm: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (value: string) => void;
   onReset: () => void;
 }) {
   return (
@@ -18,7 +18,7 @@ export function SearchBox({
         id="search"
         type="text"
         value={searchTerm}
-        onChange={onChange}
+        onChange={(e) => onChange(e.target.value)}
         placeholder="Search by name, city, degree, specialties, YOE, or phone number"
         className="w-full max-w-xl px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
