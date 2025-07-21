@@ -1,10 +1,14 @@
-type SearchBoxProps = {
+import React from "react";
+
+export function SearchBox({
+  searchTerm,
+  onChange,
+  onReset,
+}: {
   searchTerm: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onReset: () => void;
-};
-
-export function SearchBox({ searchTerm, onChange, onReset }: SearchBoxProps) {
+}) {
   return (
     <div className="mb-6">
       <label htmlFor="search" className="block text-lg font-semibold mb-1">
